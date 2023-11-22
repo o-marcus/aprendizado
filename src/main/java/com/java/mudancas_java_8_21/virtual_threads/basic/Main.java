@@ -1,5 +1,10 @@
 package com.java.mudancas_java_8_21.virtual_threads.basic;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -48,5 +53,18 @@ public class Main {
         System.out.println(t2.getName() + " terminada");
     }
 
+    public static void startTwoThreadsWithExecutor() {
+        try (ExecutorService myExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+            Future<?> future = myExecutor.submit(() -> System.out.println("Running thread"));
+            future.get(); // Espera até a tarefa teminar de executar
+            System.out.println("Task completed");
+            // ...
+        }
+        catch (InterruptedException exception) {
+                exception.printStackTrace();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
